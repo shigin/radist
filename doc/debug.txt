@@ -1,0 +1,47 @@
+= Отладка взаимодействия с Radist'ом =
+
+Если задать переменную окружения '''PYRADIST_DEBUG''' как какое--нибудь число, то в stderr будет выводиться
+информация о вызовах всех "внешних" процедур.
+
+{{{
+[shigin@merger1 ~/radist/python]$ PYRADIST_DEBUG=1 python2.4 utest.py IXFast2
+radist: debug mode enabled, unset PYRADIST_DEBUG if you don't want it
+radist func: IXConfig with args () {'config': '\nquick01.rambler.ru   -wwwFAST -wwwFAST00 -wwwFAST000 -fast -LOC_1\nquick02.rambler.ru   -wwwFAST -wwwFAST01 -wwwFAST001 -fast -LOC_1\nquick03.rambler.ru   -wwwFAST -wwwFAST00 -wwwFAST000 -fast -LOC_1\nquick04.rambler.ru   -wwwFAST -wwwFAST01 -wwwFAST001 -fast -LOC_1\nquick05.rambler.ru   -wwwFAST -wwwFAST02 -wwwFAST002 -fast -LOC_3\nquick06.rambler.ru   -wwwFAST -wwwFAST02 -wwwFAST002 -fast -LOC_3\nquick07.rambler.ru   -wwwFAST -wwwFAST03 -wwwFAST003 -fast -LOC_3\nquick08.rambler.ru   -wwwFAST -wwwFAST03 -wwwFAST003 -fast -LOC_3\n'}
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.006s
+
+OK
+[shigin@merger1 ~/radist/python]$ python2.4 utest.py IXFast2
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.006s
+
+OK
+}}}
+
+Еще для отладки '''PYRADIST_DEBUG''' может быть равен списку процедур, для которых будет установлена отладочная печать.
+{{{
+$ PYRADIST_DEBUG=helpers.r_exec python utest.py
+radist: debug mode enabled, unset PYRADIST_DEBUG if you don't want it
+radist func: r_exec with args ('10.1.1.1', 'hostname') {'stdin': <open file '/dev/null', mode 'r+' at 0xb7cf7c80>, 'flags': 1, 'stderr': <open file '/dev/null', mode 'r+' at 0xb7cf7c80>, 'stdout': <open file '/dev/null', mode 'r+' at 0xb7cf7c80>}
+radist func: r_exec with args ('merger1.rambler.ru', 'hostname') {'stdin': <open file '/dev/null', mode 'r+' at 0xb7cf7c80>, 'flags': 1, 'stderr': <open file '/dev/null', mode 'r+' at 0xb7cf7c80>, 'stdout': <open file '/dev/null', mode 'r+' at 0xb7cf7c80>}
+radist func: r_exec with args ('index3.rambler.ru', 'hostname') {'stdin': <open file '/dev/null', mode 'r+' at 0xb7cf7c80>, 'flags': 1, 'stderr': <open file '/dev/null', mode 'r+' at 0xb7cf7c80>, 'stdout': <open file '/dev/null', mode 'r+' at 0xb7cf7c80>}
+...
+}}}
+
+Обратите внимание, что если '''PYRADIST_DEBUG''' установить в `r_exec`, а не в `helpers.r_exec`, то мы не увидим вызовов "внутри" radist'а.
+
+{{{
+$ PYRADIST_DEBUG=r_exec python utest.py
+radist: debug mode enabled, unset PYRADIST_DEBUG if you don't want it
+..............................................................
+----------------------------------------------------------------------
+Ran 62 tests in 24.166s
+
+OK
+}}}
+
+== Писать в... ==
+
+Если установить '''PYRADIST_FILE''', то вывод будет записан именно в этот файл. Иначе вывод будет в `stderr`.
