@@ -6,13 +6,31 @@ import radist
 description = """The path specified in /R/notation/path.  The path can start
 with /R or with /ix depending on required config file."""
 
+def normal_run(node, command):
+    return node.cluster_exec(command)
+
+def parallel_run(node, command):
+    return node.cluster_exec(command, parallel=True)
+
+def parallel_prefix(node, command):
+    for cur, line in radist.cluster_open(node, command):
+        print cur.get('server'), ":", line
+
 if __name__ == '__main__':
     usage = "%prog [options] node-path command"
 
     parser = optparse.OptionParser(usage=usage, description=description)
     parser.disable_interspersed_args()
-    parser.add_option("--cluster", dest="cluster", default=False,
-        action="store_true", help="do not try to run command on ")
+    parser.set_defaults(cluster_run=normal_run, try_node=True)
+    parser.add_option("--no_self",
+        dest="try_node", action="store_false",
+        help="do not try to run command on node itself")
+    parser.add_option('-P',
+        dest="cluster_run", action="store_const", const=parallel_run,
+        help="run command in parallel")
+    parser.add_option('-E',
+        dest="cluster_run", action="store_const", const=parallel_prefix,
+        help="run command in parallel and prefix each line with server name")
     radist.update_optparse(parser)
     options, args = parser.parse_args()
     if len(args) < 2:
@@ -31,7 +49,7 @@ if __name__ == '__main__':
         parser.error("unknown path root: '%s'" % p)
 
     node = root.get(path)
-    if 'server' in node.get_attrs():
+    if 'server' in node.get_attrs() and options.try_node:
         node.r_exec(' '.join(args))
     else:
-        node.cluster_exec(' '.join(args))
+        options.cluster_run(node, ' '.join(args))
