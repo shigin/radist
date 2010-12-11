@@ -18,7 +18,7 @@ def has_magic(name):
     return re.match(r'[?*[]', name)
 
 def get_node(server, root_dir='/', tmp_dir='/tmp'):
-    """Creates node with server, root and temp dir."""
+    """Creates node with server, root and temp directory."""
     node = RadistNode(server)
     node.add_attr('primary', RadistPrimary('%s:%s:%s' % (server, root_dir, tmp_dir)))
     return node
@@ -262,7 +262,7 @@ class RadistNode(object):
     def r_executor(self, func, user):
         """Returns function what will be executed on node.
         
-        If ypu do not want run function from different user it's better
+        If you do not want run function from different user it's better
         to user r_pexec.
 
         WARNING: you can call function only once!!!"""
@@ -411,7 +411,7 @@ class RadistNode(object):
             return self.__childs.values()
 
     def get_node(self, *args, **kwargs):
-        """Returns node with childs from get(...).
+        """Returns node with children from get(...).
         
         It won't create node if *arg and **kwarg is empty.
         """
@@ -466,7 +466,7 @@ class RadistNode(object):
         assert isinstance(node, RadistNode)
         name = name or node.name
         if self.__childs.has_key(name):
-            raise RadistError("dublicated %s/%s" % (self.name, name))
+            raise RadistError("duplicated %s/%s" % (self.name, name))
         if "" == name.strip():
             raise RadistError("bad node name")
         self.__childs[name] = node
