@@ -47,7 +47,7 @@ cite03 -cite:002+000
 """
 
 ixfast = """
-fast01 -wwwFAST -wwwFAST00 -wwwFAST000 
+fast01 -wwwFAST -wwwFAST00 -wwwFAST000
 fast02 -wwwFAST -wwwFAST01 -wwwFAST001
 fast03 -wwwFAST -wwwFAST00 -wwwFAST000
 fast04 -indexFAST -indexFAST000
@@ -110,7 +110,7 @@ def map_raise_at(at=2):
             raise MyException("")
         return x
     return nested
-    
+
 class MyException(Exception):
     pass
 
@@ -304,11 +304,11 @@ class IXConfTest(unittest.TestCase):
         assert ix.src.cluster_size() == 1
 
     def test_bad_cfg(self):
-        self.failUnlessRaises(radist.IXConfError, radist.IXConfig, 
+        self.failUnlessRaises(radist.IXConfError, radist.IXConfig,
             config=('www1 -'))
-        self.failUnlessRaises(radist.IXConfError, radist.IXConfig, 
+        self.failUnlessRaises(radist.IXConfError, radist.IXConfig,
             config=('www1 cite'))
-        self.failUnlessRaises(radist.IXConfError, radist.IXConfig, 
+        self.failUnlessRaises(radist.IXConfError, radist.IXConfig,
             config=('www1 -cite:000:0001'))
 
     def setUp(self):
@@ -339,7 +339,7 @@ class ColoredNodeTest(unittest.TestCase):
     def test_still_fail_at_two_name(self):
         www = radist.ColoredNode('www')
         www.add_child(radist.RadistNode('common'))
-        self.failUnlessRaises(radist.RadistError, www.add_child, 
+        self.failUnlessRaises(radist.RadistError, www.add_child,
                 radist.RadistNode('common'))
 
 class RadistNodeTest(unittest.TestCase):
@@ -349,13 +349,13 @@ class RadistNodeTest(unittest.TestCase):
     def test_fail_at_two(self):
         www = radist.RadistNode('www')
         www.add_child(radist.RadistNode('common'))
-        self.failUnlessRaises(radist.RadistError, www.add_child, 
+        self.failUnlessRaises(radist.RadistError, www.add_child,
                 radist.RadistNode('common'))
 
 class RadistConfTest(unittest.TestCase):
     def test_rexec_fail(self):
         self.failUnlessRaises(radist.RadistError, self.r.c001.stable_1.r_exec, 'ls')
-            
+
     def test_get_node(self):
         assert self.r.get_node() == self.r
         # FakeNode doesn't set name by node.name
@@ -427,7 +427,7 @@ class RadistConfTest(unittest.TestCase):
 
     def test_mask(self):
         servers = self.r.get('*/server')
-        for i in ['index1.rambler.ru', 'index3.rambler.ru', 
+        for i in ['index1.rambler.ru', 'index3.rambler.ru',
                   'index7.rambler.ru', 'index10.rambler.ru']:
             assert i in servers, '%s not in list' % i
 
@@ -440,7 +440,7 @@ class RadistConfTest(unittest.TestCase):
 
     def test_get_tmp(self):
         assert self.r.get('qwe/tmp') == '/tmp'
-        
+
     def test_tmp(self):
         assert self.r.aaa.primary.temp == '/tmp'
 
@@ -484,13 +484,13 @@ class RadistConfTest(unittest.TestCase):
         self.failUnlessRaises(radist.RadistPathError, self.r.get, 'aaa/space')
 
     def test_bad_config(self):
-        self.failUnlessRaises(radist.RadistConfError, radist.RadistConf, 
+        self.failUnlessRaises(radist.RadistConfError, radist.RadistConf,
             config="  primary=111:222")
-        self.failUnlessRaises(radist.RadistConfError, radist.RadistConf, 
+        self.failUnlessRaises(radist.RadistConfError, radist.RadistConf,
             config="/R\n  primary=111:222")
-        self.failUnlessRaises(radist.RadistConfError, radist.RadistConf, 
+        self.failUnlessRaises(radist.RadistConfError, radist.RadistConf,
             config=("/R/q", "  primary=111"))
-        self.failUnlessRaises(radist.RadistError, radist.RadistConf, 
+        self.failUnlessRaises(radist.RadistError, radist.RadistConf,
             config=("/R/", "  primary=111:222"))
         self.failUnlessRaises(radist.RadistConfError, radist.RadistConf,
             config=("/R/x1", "  primary=111:222", "/R/x1", "  spacelimit=666"))
@@ -502,18 +502,18 @@ class RadistConfTest(unittest.TestCase):
         assert '001' in repr(self.r.get('rccf/001'))
 
     def test_run_fail(self):
-        self.failUnlessRaises(TypeError, self.r.cluster_exec, 
+        self.failUnlessRaises(TypeError, self.r.cluster_exec,
                 'ls', parallel=True, single=True)
 
     def test_cluster(self):
         result = self.r.cluster_exec('ls %(reallybadarg)d', parallel=True)
         assert len(result) == 0
-        
+
 
 class IXDirectiveTest(unittest.TestCase):
     def setUp(self):
         self.r = radist.IXConfig(config = ix_config)
-    
+
     def test_count(self):
         self.assert_(self.r.directive_count == 8)
 
@@ -524,7 +524,7 @@ class IXDirectiveTest(unittest.TestCase):
         self.assertRaises(radist.IXConfError, radist.ix.split_special_role_directive, bad_line)
         very_bad_line = "|^LOC.*$ os.system('ls')"
         self.assertRaises(radist.IXConfError, radist.ix.parse_special_role_directive, very_bad_line)
-        
+
     def test_directory(self):
         self.assertEqual('index7.rambler.ru', self.r.index.c001.primary.server)
         self.assertEqual('/spool9/idx_4_6-search/001', self.r.index.c001.primary.dir)

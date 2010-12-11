@@ -63,7 +63,7 @@ class TestRunner(unittest.TestCase):
         assert list(self.node.r_pexec(double, 30)) == list(double(30))
 
     def test_external(self):
-        assert self.node.r_pexec(can_read, '/') 
+        assert self.node.r_pexec(can_read, '/')
 
     def test_raise(self):
         self.failUnlessRaises(OSError, self.node.r_pexec, raiser)

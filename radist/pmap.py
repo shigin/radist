@@ -8,16 +8,16 @@ try:
     Thread = thread2.Thread
 except ImportError:
     Thread = threading.Thread
- 
+
 class PMapThread(Thread):
     """PMapThread is a helper for pmap function.
 
-    It gets tuple (num, args, kwargs) from in_queue, 
+    It gets tuple (num, args, kwargs) from in_queue,
     calls function func(*args, **kwargs) and put
     tuple (num, flag, result) to out_queue.
     Normally flag is set to True.
 
-    If there is no more tuples in in_queue, returns 
+    If there is no more tuples in in_queue, returns
     (-1, False, self).
 
     If func raise an error, tuple (num, False, exception)
@@ -36,7 +36,7 @@ class PMapThread(Thread):
                 debug("get %d task" % number)
             except Queue.Empty:
                 self.out_queue.put((-1, False, self))
-                return 
+                return
             try:
                 result = self.func(*args, **kwargs)
                 self.out_queue.put((number, True, result))
@@ -52,7 +52,7 @@ def _empty_queue(queue):
             queue.get_nowait()
     except Queue.Empty:
         pass
-        
+
 def _pmap(func, args, max_threads=10, extra={}, ignore_exceptions=False):
     """See pmap"""
     thread_pool = {}
@@ -98,8 +98,8 @@ def _pmap(func, args, max_threads=10, extra={}, ignore_exceptions=False):
                 next_num += 1
                 if flag:
                     yield result
-                else: 
-                    if not ignore_exceptions: 
+                else:
+                    if not ignore_exceptions:
                         _empty_queue(in_queue)
                         raise result
             else:

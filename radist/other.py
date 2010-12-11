@@ -4,7 +4,7 @@ from collections import defaultdict
 # TODO: write case test
 def cluster_read(node, command, cluster=True):
     """Returns mapping node -> command result.
-    
+
     Command would execute on every cluster machine in node.
     """
     stdouts = []

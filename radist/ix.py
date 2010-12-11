@@ -91,7 +91,7 @@ class FastIndex3(Special):
         Special.__init__(self, role.replace('indexFAST', 'indexFAST3_'), attrs)
 
 
-import types        
+import types
 def class_by_name(name):
     if not (name in globals() and type(globals()[name]) == types.TypeType):
         raise IXConfError, "Can't find class named %s" % name
@@ -111,7 +111,7 @@ def parse_special_role_directive(line):
     cleaned = line[1:]
     r, class_name = split_special_role_directive(cleaned)
     return (re.compile(r), class_by_name(class_name))
-    
+
 
 def is_special_role(special):
     'Return True if special is directive for special role'
@@ -127,9 +127,9 @@ class IXConfig(RadistNode):
         self.clear_special_roles()
         self.directive_count = 0
         self.directories = {}
-        
+
         RadistNode.__init__(self, 'ix')
-        content = adv_get_content(URI, config)        
+        content = adv_get_content(URI, config)
 
         clusters = {}
         for line, special in get_line_iterator(content, directives):
@@ -139,7 +139,7 @@ class IXConfig(RadistNode):
             elif is_directory(special):
                 self.update_directories(special)
                 self.directive_count += 1
-                
+
             x = self.__get_roles(line)
             if x is None:
                 # server without roles, skip one
@@ -170,22 +170,22 @@ class IXConfig(RadistNode):
                             RadistPrimary('%(server)s:/spool/_R_/%(path)s:/spool/_R_/%(path)s/tmp-radist' % \
                                 {'server': server, 'path': path.split('/')[-1]}))
                     self.add_node_to_path('/'.join([path, node.name]), node)
-        
+
 
     def clear_special_roles(self):
         self.special_roles = []
-        
+
 
     def get_special(self, role, attrs):
         for regex, special in self.special_roles:
             if regex.match(role):
                 return special(role, attrs)
         return Special(role, attrs)
-    
+
 
     def add_special_role(self, parsed):
         self.special_roles.append(parsed)
-        
+
 
     def update_directories(self, special):
         'Update self.directories with data from special (which must be directory directive)'
@@ -200,7 +200,7 @@ class IXConfig(RadistNode):
         key = '/'.join([path, name])
         return self.directories.get(key)
 
-        
+
     def add_node_to_path(self, path, node):
         xnode = self
         fpath = path.split('/')
@@ -219,7 +219,7 @@ class IXConfig(RadistNode):
     def __get_roles(self, line):
         splited = line.split()
         if len(splited) in [0, 1]:
-            # empty string or server without roles, skip it 
+            # empty string or server without roles, skip it
             return None
         server = splited[0]
         raw_roles = []

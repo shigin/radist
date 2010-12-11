@@ -10,10 +10,10 @@ def try3(func, url):
         except urllib2.URLError, err:
             pass
     raise err
-    
+
 def get_r():
     """Returns default /R/ tree.
-    
+
     It try to do it 3 times."""
     if get_r.r is None:
         if 'RADIST_CONF_URL' in os.environ:

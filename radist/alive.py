@@ -16,9 +16,9 @@ def void_handler(signum, trace):
 
 def get_dead_nodes(node, timeout=15, all_nodes=None):
     """Returns dead nodes from the node.
-    
+
     It raises exception if node hasn't got any servers.
-    
+
     Server is alive if it can run hostname without error."""
     assert timeout > 1
     devnull = file(os.devnull, 'r+')
@@ -65,6 +65,6 @@ def is_alive(node, **kwargs):
     """Returns True if all servers in node is alive.
 
     It raises exception if node hasn't got any servers.
-    
+
     See get_dead_nodes."""
     return len(get_dead_nodes(node, **kwargs)) == 0

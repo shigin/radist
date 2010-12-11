@@ -5,9 +5,9 @@ import select
 BUFSIZE = 1024*16
 
 class AdvMuxReader(object):
-    """Class multiplexes a number of file descriptors in the one 
+    """Class multiplexes a number of file descriptors in the one
     iterable object by newline.
-    
+
     It gets list of pairs (file, object), and returns (object, line)
     pair for each line, separated by '\\n'.
 
@@ -26,7 +26,7 @@ class AdvMuxReader(object):
         proc1: 2
         proc2: 4
     Iterable returns one line from any file.
-    
+
     WARNING!!! MuxReader closes files at exit.
     WARNING!!! MuxReader sets files to O_NONBLOCK mode."""
     def __init__(self, filemap):
@@ -45,7 +45,7 @@ class AdvMuxReader(object):
             self.__fds[xfile.fileno()] = xfile
             self.__objs[xfile.fileno()] = obj
             self.__buff[xfile.fileno()] = ""
- 
+
     def __del__(self):
         for fd in self.__fds.values():
             self.__poll.unregister(fd.fileno())
@@ -56,7 +56,7 @@ class AdvMuxReader(object):
     def __unregister_fd(self, fd):
         """Closes file object, deletes it from poll,
         frees buffer.
-        
+
         Returns the rest of buffer."""
         self.__poll.unregister(fd)
         self.__fds[fd].close()
@@ -68,7 +68,7 @@ class AdvMuxReader(object):
 
     def __get_buff(self):
         """Returns text from buffer.
-        
+
         Returns None if buffers are empty."""
         if len(self.__buff[-1]) > 0:
             return self.__buff[-1].pop(0)
@@ -81,7 +81,7 @@ class AdvMuxReader(object):
                 self.__buff[key] = splited[1]
                 return self.__objs[key], splited[0]
         return None
-                
+
     def next(self):
         """Returns tuple (object for file, next line)."""
         buff = self.__get_buff()
@@ -116,9 +116,9 @@ class AdvMuxReader(object):
 
 from itertools import repeat, izip
 def MuxReader(files):
-    """Class multiplexes a number of file descriptors in the one 
+    """Class multiplexes a number of file descriptors in the one
     iterable object by newline.
-    
+
     Example:
         fds = [os.popen2('echo -e 1\\n2')[1], os.popen2('echo -e 3\\n4')[1]]
         mr = MuxReader(fds)
@@ -131,7 +131,7 @@ def MuxReader(files):
         2
         4
     Iterable returns one line from any file.
-    
+
     WARNING!!! MuxReader closes files at exit.
     WARNING!!! MuxReader sets files to O_NONBLOCK mode."""
     filemap = zip(files, repeat(1))

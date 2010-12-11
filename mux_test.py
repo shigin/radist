@@ -5,7 +5,7 @@ fdlist = []
 args = ['first', 'second', '3rd']
 for arg in args:
     fdlist.append(os.popen2('./mux_test.sh %s' % arg)[1])
-     
+
 mr = mux_fds.MuxReader(fdlist)
 nums = {}
 for line in mr:

@@ -12,7 +12,7 @@ except ImportError:
         wrapper.__dict__.update(wrapped.__dict__)
         return wrapper
 
-if 'PYRADIST_FILE' in os.environ: 
+if 'PYRADIST_FILE' in os.environ:
     output = open(os.environ['PYRADIST_FILE'], 'w')
 else:
     output = sys.stderr

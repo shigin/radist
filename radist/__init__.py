@@ -16,7 +16,7 @@ def _set_debug():
     import os, sys
     def is_wrap(module, name):
         thing = getattr(module, name)
-        ca = not name.startswith('_') and callable(thing) 
+        ca = not name.startswith('_') and callable(thing)
         if ca:
             return type(thing) != type(Exception) or not issubclass(thing, Exception)
         else:

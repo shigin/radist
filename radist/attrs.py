@@ -31,7 +31,7 @@ def map_get(node, path):
 
 class RadistSpaceLimit(object):
     """Represents spacelimit attribute of the radist node.
-    
+
     Attributes:
      * limit"""
     def __init__(self, value):
@@ -39,7 +39,7 @@ class RadistSpaceLimit(object):
 
 class RadistBackup(object):
     """Represents backup attribute of the radist node.
-    
+
     Attributs:
      * raw"""
     def __init__(self, value):
@@ -47,10 +47,10 @@ class RadistBackup(object):
 
 class RadistPrimary(object):
     """Represent primary attribute of the radist node.
-    
+
     Attributs:
-     * server 
-     * dir, 
+     * server
+     * dir,
      * [temp]
     """
     def __init__(self, value):

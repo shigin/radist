@@ -5,9 +5,9 @@ from attrs import get_radist_value
 
 class RadistConf(RadistNode):
     """Represents radist.conf file.
-    
+
     Simple usage:
-    
+
     In [43]: rc = RadistConf('http://conf.rambler.ru/rambler/radist.conf')
 
     In [44]: rc.rccf.c000.primary.server
@@ -22,9 +22,9 @@ class RadistConf(RadistNode):
 
     def __init__(self, URI=None, config=None):
         """URI is the link to config.
-        
+
         config is string represent of config.
-        
+
         For tests you can use something like
         In [6]: r = radist.RadistConf(config='''/R/qwe
           primary=index1.rambler.ru:/:/tmp'''

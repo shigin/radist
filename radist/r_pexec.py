@@ -58,8 +58,8 @@ def executor(server, func, user):
     if helpers.is_local(server):
         if helpers.is_current_user(helpers.get_user(user)):
             return func
-    stdin, input = helpers.r_popen2(server, '/usr/bin/env python', 
-                                    user=user) 
+    stdin, input = helpers.r_popen2(server, '/usr/bin/env python',
+                                    user=user)
     return functools.partial(executor_helper, stdin, input, func)
 
 def executor_helper(stdin, stdout, func, *args, **kwargs):
@@ -71,7 +71,7 @@ def executor_helper(stdin, stdout, func, *args, **kwargs):
 
 def r_pexec(server, func, *args, **kwargs):
     return executor(server, func, user=None)(*args, **kwargs)
-    
+
 def func_string_import(func):
     sfunc = inspect.getsource(func)
     modules = sys.modules.keys()
@@ -95,7 +95,7 @@ def func_string_import(func):
                 ifrom[(name, local[name].__module__)] = 1
                 continue
             try:
-                sfunc  = '\n'.join([sfunc, 
+                sfunc  = '\n'.join([sfunc,
                         "%s = loads('%s')" % (name, dumps(local[name]))
                                   ])
                 continue
@@ -125,13 +125,13 @@ def pexec_helper(stdin, input, func, *args, **kwargs):
     else:
         sfunc, modules, ifrom = func_string_import(func)
     d = {
-        #'func': pickle.dumps(func).encode('hex'), 
+        #'func': pickle.dumps(func).encode('hex'),
         'func': sfunc,
         'func_name': func.__name__,
 
         'ifrom': dumps(ifrom),
         'modules': dumps(modules),
-        'args': dumps(args), 
+        'args': dumps(args),
         'kwargs': dumps(kwargs)
         }
     #print PRUN % d

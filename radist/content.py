@@ -29,7 +29,7 @@ def auth_from_wget(filename='~/.wgetrc'):
     return d.get('user', DUSER), d.get('passwd', DPASS)
 
 def get_auth(host):
-    info = get_auth.netrc.authenticators(host) 
+    info = get_auth.netrc.authenticators(host)
     if info:
         host, account, passwd = info
         return host, passwd
@@ -56,7 +56,7 @@ except ImportError:
         try:
             # builtin functions hasn't got __dict__
             wrapper.__dict__.update(func.__dict__)
-        except: 
+        except:
             pass
         try:
             # xml rpc function hasn't got __name__
@@ -91,7 +91,7 @@ __all__ = ['get_file', 'adv_get_content', 'get_line_iterator', 'file_fabric']
 
 class Content(object):
     """Abstract class for get_class fabric.
-    
+
     Childs of the class should returns True if can handle name.
     Method get_content returns object with readlines and read methods.
     """
@@ -118,7 +118,7 @@ class Content(object):
     @staticmethod
     def get_content(name):
         """Returns object with readlines and read methods.
-        
+
         Usually it's 'file' object."""
         raise NotImplementedError('derived class should overload me')
 
@@ -149,7 +149,7 @@ class LocalFile(Content):
             name.startswith('file://') or \
             name.startswith('~') or \
             os.path.isfile(name)
-    
+
     @staticmethod
     def can_target(name):
         return True
@@ -175,7 +175,7 @@ class URLFile(Content):
         return name.startswith('http://') or \
             name.startswith('ftp://') or \
             name.startswith('https://')
-    
+
     @staticmethod
     def can_target(name):
         return name.startswith('ftp://')
@@ -328,7 +328,7 @@ def get_file(URI):
 
 def adv_get_content(URI=None, config=None):
     """Returns content of URI or splited by \\n config.
-    
+
     Example:
         def parse(uri=None, config=None):
             content = adv_get_content(uri, config)
@@ -350,13 +350,13 @@ def adv_get_content(URI=None, config=None):
 def get_line_iterator(iterable, special=[]):
     """Returns iterator over iterable.
 
-    Iterator returns lines without trailing '\\n' and without 
+    Iterator returns lines without trailing '\\n' and without
     '#' style comments.
     """
     def helper(str):
         "Helper str -> str"
         pair = str.rstrip('\n').split('#', 1)
-        if special: 
+        if special:
             if len(pair) == 1:
                 return pair[0], None
             else:

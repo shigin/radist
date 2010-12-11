@@ -11,7 +11,7 @@ setup(
     author="Alexander Shigin",
     author_email='shigin@rambler-co.ru',
     description="Helper module to work with radist config",
-    long_description="""Module was developed to easy access to radist 
+    long_description="""Module was developed to easy access to radist
     configuration file.
     """,
     classifiers=['misc'],

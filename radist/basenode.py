@@ -36,7 +36,7 @@ def make_child_name(name):
     if "-" in name:
         cname = cname.replace("-", "_")
     return cname
-        
+
 def adv_extend(list, nodes):
     if isinstance(nodes, (RadistNode, basestring)):
         list.append(nodes)
@@ -65,7 +65,7 @@ class RadistNode(object):
         The source file can be specified by file_name or by any iterable
         in lines.
 
-        Routine raises EnvironmentError if error occurred. 
+        Routine raises EnvironmentError if error occurred.
         """
         devnull = open(os.devnull)
         if lines is None:
@@ -91,8 +91,8 @@ class RadistNode(object):
 
     def cluster_put(self, out, file_name=None, lines=None, **kwargs):
         """Put file on a remote machines.
-        
-        Please be careful, file would be read into the memory, if lines 
+
+        Please be careful, file would be read into the memory, if lines
         isn't tuple, string or list it would be copied!
 
         For details please look at put_file."""
@@ -153,7 +153,7 @@ class RadistNode(object):
                 # XXX
                 pass
             if pid not in pids:
-                # XXX it's REALLY strange, we should inform user, but 
+                # XXX it's REALLY strange, we should inform user, but
                 # i don't know how
                 pass
             else:
@@ -183,24 +183,24 @@ class RadistNode(object):
                 # XXX shit happens
                 pass
         return result
-        
-    def cluster_exec(self, cmd, single=False, parallel=False, 
+
+    def cluster_exec(self, cmd, single=False, parallel=False,
                 all_nodes=False, check=False, timeout=None, **kwargs):
         """Runs cmd on cluster.
-        
-        If single is True, commands will run parallel, but only one 
+
+        If single is True, commands will run parallel, but only one
         command on server.
 
         If parallel is True, commands will run parallel and wouldn't
         see how many ones on one server.
-        
+
         If both is false, one command per time.
-        
+
         If all_nodes is true, runs command on all child of the node,
         else only on cluster (e.g. nodes with numeric name).
-        
+
         If check is true, runs command only if all servers in node is alive.
-        Optional argument is 'timeout', it's a timeout to determine if server 
+        Optional argument is 'timeout', it's a timeout to determine if server
         is alive. See get_dead_nodes for detail.
         """
         if single and parallel:
@@ -215,10 +215,10 @@ class RadistNode(object):
         pids = {}
         queue = {}
         to_run = self.__get_exec_list(cmd, all_nodes)
-        for node, command in to_run.items(): 
+        for node, command in to_run.items():
             server = node.primary.server
             if parallel:
-                pid = helpers.r_exec(server, command, 
+                pid = helpers.r_exec(server, command,
                     flags=os.P_NOWAIT, stdin=devnull, **kwargs)
                 pids[pid] = node
             elif single:
@@ -233,21 +233,21 @@ class RadistNode(object):
             return self.__run_single(queue, **kwargs)
         else:
             return result
-    
+
     def _get_server(self):
         if hasattr(self, 'primary'):
             return self.primary.server
         else:
             raise RadistError("can't run command on node without primary server.")
-        
+
     def r_exec(self, command, **kwargs):
         """Run command on node."""
-        return helpers.r_exec(self._get_server(), 
+        return helpers.r_exec(self._get_server(),
                     command % self.get_attrs(), **kwargs)
 
     def r_popen2(self, command, **kwargs):
         """Run command on node."""
-        return helpers.r_popen2(self._get_server(), 
+        return helpers.r_popen2(self._get_server(),
                     command % self.get_attrs(), **kwargs)
 
     def r_popen3(self, command, **kwargs):
@@ -261,7 +261,7 @@ class RadistNode(object):
 
     def r_executor(self, func, user):
         """Returns function what will be executed on node.
-        
+
         If you do not want run function from different user it's better
         to user r_pexec.
 
@@ -270,21 +270,21 @@ class RadistNode(object):
 
     def _select(self, **kwargs):
         """Returns list with node, which attributes equals to given values.
-        
+
         If given value is callable, value calls with attribute as argument.
-        
+
         Sample:
         In [64]: r.get(server="index1.rambler.ru")
-        Out[64]: 
+        Out[64]:
         [<RadistNode 'top100-refindex' server: 'index1.rambler.ru'>,
          <RadistNode 'build_fhsearch' server: 'index1.rambler.ru'>]
 
         In [65]: r.get(server=lambda x: x.startswith("index1"))
-        Out[65]: 
+        Out[65]:
         [<RadistNode 'top100-refindex' server: 'index1.rambler.ru'>,
          <RadistNode 'build_fhsearch' server: 'index1.rambler.ru'>]
         """
-        for i in kwargs.keys(): 
+        for i in kwargs.keys():
             if i not in find_map.keys():
                 raise RadistPathError('Invalid attribute path', i)
 
@@ -310,7 +310,7 @@ class RadistNode(object):
 
     def iter_childs(self):
         """Iterate over children.
-        
+
         Generate yields pair (name, node).
         """
         for name, node in self.__childs.iteritems():
@@ -342,7 +342,7 @@ class RadistNode(object):
             if result or mask:
                 return result
             else:
-                raise RadistPathError("Bad child path.", name)                           
+                raise RadistPathError("Bad child path.", name)
         else:
             raise RadistPathError("Bad child path.", name)
 
@@ -369,7 +369,7 @@ class RadistNode(object):
 
     def _attr_get(self, args, mask=False):
         """Returns node or attribute with path.
-        
+
         Sample example:
         In [57]: r.get('rccf/001/server', 'rccf/001')
         Out[57]: ['webbase05.rambler.ru', <RadistNode '001' server: 'webbase05.rambler.ru'>]
@@ -395,7 +395,7 @@ class RadistNode(object):
 
     def get(self, *args, **kwargs):
         """Returns attributes or nodes.
-        
+
         *arg represent path to node/attribute.
         **kwargs selects all nodes with arguments.
 
@@ -412,7 +412,7 @@ class RadistNode(object):
 
     def get_node(self, *args, **kwargs):
         """Returns node with children from get(...).
-        
+
         It won't create node if *arg and **kwarg is empty.
         """
         if len(args) + len(kwargs) == 0:
@@ -432,7 +432,7 @@ class RadistNode(object):
 
     def get_default(self, arg, default=None):
         """Get node or attribute.
-        
+
         If it's absent, return default value."""
         try:
             return self.get(arg)
@@ -441,7 +441,7 @@ class RadistNode(object):
 
     def get_servers(self, all_nodes=False):
         """Returns FakeNode with all machines from current node.
-        
+
         If all_nodes is False [default], gets servers only from cluster."""
         servers = {}
         if all_nodes:
@@ -461,7 +461,7 @@ class RadistNode(object):
 
     def add_child(self, node, name=None):
         """Adds child to node.
-        
+
         Name is optional parameter. If it sets, it override node name."""
         assert isinstance(node, RadistNode)
         name = name or node.name

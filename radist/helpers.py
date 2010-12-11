@@ -44,7 +44,7 @@ def is_current_user(user):
         # where is no user with name
         # XXX it's better to inform user
         return True
-            
+
 def get_user(user=None):
     if user is None:
         return os.environ.get('PYRADIST_USER', None)
@@ -55,25 +55,25 @@ RUNNER = get_runner(__RUNNERS)
 LRUNNER = get_runner(__LRUNNERS)
 SUDO = find_in_path('sudo')
 R_SUB2 = 32 # who matters
-R_SUB3 = 64 
+R_SUB3 = 64
 
 assert os.P_WAIT not in (R_SUB2, R_SUB3)
 assert os.P_NOWAIT not in (R_SUB2, R_SUB3)
 
 def r_exec(host, cmd, flags=os.P_WAIT, stdin=None, stdout=None, stderr=None, user=None):
     """Executes cmd on host using runner.
-    
+
     If flags equals to os.P_WAIT, routine returns exit code of runner.
 
     If flags equals to os.P_NOWAIT, routine returns pid of runner.
 
-    If flags equals to radist.R_SUB2, routine returns tuple 
-    (pid, stdin, stdout). If stdin or stdout is file do not include descriptor 
+    If flags equals to radist.R_SUB2, routine returns tuple
+    (pid, stdin, stdout). If stdin or stdout is file do not include descriptor
     to tuple.
-    
-    If flags equals to radist.R_SUB3, routine returns tuple 
+
+    If flags equals to radist.R_SUB3, routine returns tuple
     (pid, stdin, stdout, stderr) like radist.R_SUB2."""
-    # subprocess.Popen checks if stdin, stdout and stderr is file, 
+    # subprocess.Popen checks if stdin, stdout and stderr is file,
     # but this behavour wasn't described, that's why i fork myself...
     stds = {pty.STDIN_FILENO: stdin, pty.STDOUT_FILENO: stdout, pty.STDERR_FILENO: stderr}
     xstds = {}
@@ -105,13 +105,13 @@ def r_exec(host, cmd, flags=os.P_WAIT, stdin=None, stdout=None, stderr=None, use
         else:
             if user:
                 if user.startswith('-'):
-                    return os.execl(RUNNER, RUNNER, host, 
-                        'sudo', '-u', user.lstrip('-'), 
+                    return os.execl(RUNNER, RUNNER, host,
+                        'sudo', '-u', user.lstrip('-'),
                         'sh', '-c', '"%s"' % cmd.replace('"', r'\"'))
                 elif '@' in user:
                     remote, sudo = user.split('@', 1)
-                    return os.execl(RUNNER, RUNNER, '-l', remote, host, 
-                        'sudo', '-u', sudo, 
+                    return os.execl(RUNNER, RUNNER, '-l', remote, host,
+                        'sudo', '-u', sudo,
                         'sh', '-c', '"%s"' % cmd.replace('"', r'\"'))
                 else:
                     return os.execl(RUNNER, RUNNER, '-l', user, host, cmd)
