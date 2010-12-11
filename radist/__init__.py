@@ -11,6 +11,7 @@ from default import get_r, get_ix
 from content import *
 from pmap import pmap
 from other import cluster_read
+from opts import update_optparse
 
 def _set_debug():
     import os, sys
