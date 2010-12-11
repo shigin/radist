@@ -1,0 +1,37 @@
+#!/usr/bin/env python
+import sys
+import optparse
+import radist
+
+description = """The path specified in /R/notation/path.  The path can start
+with /R or with /ix depending on required config file."""
+
+if __name__ == '__main__':
+    usage = "%prog [options] node-path command"
+
+    parser = optparse.OptionParser(usage=usage, description=description)
+    parser.disable_interspersed_args()
+    parser.add_option("--cluster", dest="cluster", default=False,
+        action="store_true", help="do not try to run command on ")
+    radist.update_optparse(parser)
+    options, args = parser.parse_args()
+    if len(args) < 2:
+        parser.error("need path and command")
+
+    path = args.pop(0)
+    p, path = path.split('/', 1)
+    if p == '':
+        p, path = path.split('/', 1)
+
+    if p in ("ix", "IX"):
+        root = radist.get_ix()
+    elif p in ("r", "R"):
+        root = radist.get_r()
+    else:
+        parser.error("unknown path root: '%s'" % p)
+
+    node = root.get(path)
+    if 'server' in node.get_attrs():
+        node.r_exec(' '.join(args))
+    else:
+        node.cluster_exec(' '.join(args))
