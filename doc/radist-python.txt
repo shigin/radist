@@ -85,6 +85,7 @@ merger1.rambler.ru `r2sh -l indexator id`.
 **pmap** --- параллельный map. Запускает max_threads тредов. 
 
 Еще параметры. 
+
   * `extra` --- словарь, который передается как **extra в функцию.
   * `ignore_exceptions` --- если True, то пропустить аргумент, который вызвал
     исключение при обработке.
@@ -294,7 +295,7 @@ __Использование:__ get_node и get_servers выдает на вых
 В отличие от FakeNode, в ColoredNode нельзя добавить более одного ребенка 
 с одинаковым не числовым именем.
 
-__Использование:__ IXConfig для www, {{{wwwFast[0-9]+}}}, cite, refindex2_backup
+__Использование:__ IXConfig для www, wwwFast[0-9]+, cite, refindex2_backup
 
 Атрибуты
 --------
@@ -546,32 +547,32 @@ cluster_put
 
 Если, например, добавлена директива 
 
-{{{
-#/index/001 some_server:some_dir:some_temp
-}}}
+    #/index/001 some_server:some_dir:some_temp
 
 то 
 
     r = radist.get_ix()
-    r.index.c001.primary.server вернет some_server
-    r.index.c001.primary.dir вернет some_dir
-    r.index.c001.primary.temp вернет some_temp
+    r.index.c001.primary.server # => some_server
+    r.index.c001.primary.dir    # => some_dir
+    r.index.c001.primary.temp   # => some_temp
 
 
 Все директивы должны находится в начале файла ixServers.cfg.
 
-В начале ixServers.cfg должны находится следущие директивы:
+### Роли
 
-{{{
-#|^LOC.*$ Location
-#|^wwwFAST\d{2}$ Fast2
-#|^wwwFAST\d{3}$ Fast3
-#|^indexFAST\d{3}$ FastIndex3
-#|^www\d+$ WWW
-#|^cite.*$ Cite
-#|^refindex2_backup.*$ RefBackup
-}}}
+  * Fixed --- роль рассматривается "как есть";
+  * WWW --- создает "цветную" ноду.
 
+Остальные роли очень узко специализированы.
+
+### Например
+
+    #!^cluster2$ Fixed
+    #!^cluster3$ Fixed
+    s1 -cluster2
+    s2 -cluster3
+    s3 -cluster2 -cluster3
 
 Готовое решение
 ===============
