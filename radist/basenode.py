@@ -104,10 +104,16 @@ class RadistNode(object):
         for machine in self.cluster():
             machine.put_file(out, lines=lines, **kwargs)
 
-    def cluster(self):
-        """Returns cluster nodes."""
-        return [self.__childs[key] for key in self.__childs.keys() \
-                if key.isdigit()]
+    def cluster(self, cluster=True):
+        """Returns cluster nodes.
+
+        If cluster is False, returns every machine in node.
+        """
+        if cluster:
+            return [self.__childs[key] for key in self.__childs.keys()
+                    if key.isdigit()]
+        else:
+            return self.get()
 
     def cluster_size(self):
         """Returns cluster size of node."""
