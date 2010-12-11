@@ -132,7 +132,7 @@ class PMap(unittest.TestCase):
         for i in range(10):
             if i == stop:
                 raise MyException()
-            time.sleep(1)
+            time.sleep(0.5)
             yield i
 
     def test_none(self):
@@ -151,7 +151,7 @@ class PMap(unittest.TestCase):
         raise_at = 2
         x = radist.pmap(int, self.err_iterator(raise_at))
         t = get_exec_time(self.failUnlessRaises, MyException, list, x)
-        assert t <= raise_at * 1.1, "time was %.2f" % t
+        assert t <= raise_at * 0.55, "time was %.2f" % t
         tc = threading.activeCount()
         assert tc == 1, "there are %d threads" % tc
 
