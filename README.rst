@@ -4,6 +4,8 @@ Radist: a really simple multiply server command runner
 
 The really simple configuration file:
 
+::
+
     # http://conf/config/ixServers.cfg
     server1     -build -log
     server2     -frontend -log
@@ -11,6 +13,8 @@ The really simple configuration file:
     server4     -dev_build -backup -log
 
 And you can run some commands on the sets of machine:
+
+::
 
     $ ./rrun -E /ix/log df -h /
     server1 : Filesystem            Size  Used Avail Use% Mounted on
