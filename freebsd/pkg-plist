@@ -1,3 +1,4 @@
+bin/rrun
 %%PYTHON_SITELIBDIR%%/radist/alive.py
 %%PYTHON_SITELIBDIR%%/radist/alive.pyc
 %%PYTHON_SITELIBDIR%%/radist/attrs.py
