@@ -1,5 +1,5 @@
 PORTNAME = radist
-PORTVERSION = 0.2.3
+PORTVERSION = 0.2.4
 PKGNAMEPREFIX = ${PYTHON_PKGNAMEPREFIX}
 CATEGORIES = misc
 MASTER_SITES = https://github.com/downloads/shigin/radist/
