@@ -43,12 +43,12 @@ merger1.rambler.ru `r2sh -l indexator id`.
 
 С **IXSEARCH_SERVERMAP** и **RADIST_CONF_URL** все понятно: они задают
 положение файла. Может быть всем, чем угодно. Единственное, не может получать
-файл по `ssh` как `batch_sh.sh`. Не рекомндую задавать это как **ra://**:
+файл по `ssh` как `batch_sh.sh`. Не рекомендую задавать это как **ra://**:
 получится бесконечная рекурсия.
 
 Если задан **RADIST_CONF_PATH** или **RADIST_CONF_HOST**, то они будут склеены,
 при этом по умолчанию **RADIST_CONF_HOST** пустая строка, а
-**RADIST_CONF_PATH** `/rambler/radist.conf`.
+**RADIST_CONF_PATH** `/config/radist.conf`.
 
 Основные функции
 ================
@@ -215,12 +215,12 @@ r_executor принимает параметр user.
 **RadistConf** - используется для чтения конфига `radist.conf`.
 
     import radist
-    r = radist.RadistConf('http://conf.rambler.ru/conf/radist.conf')
+    r = radist.RadistConf('http://conf/config/radist.conf')
 
 **IXConfig** - используется для чтения конфига `ixServers.cfg`.
 
     import radist
-    ix = radist.IXConfig('http://conf.rambler.ru/conf/ixServers.cfg')
+    ix = radist.IXConfig('http://conf/config/ixServers.cfg')
 
 **Используйте** `get_r` и `get_ix`, если нужны конфиги по умолчанию. 
 

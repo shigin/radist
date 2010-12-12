@@ -20,9 +20,9 @@ def get_r():
             url = os.environ['RADIST_CONF_URL']
         elif 'RADIST_CONF_PATH' in os.environ or 'RADIST_CONF_HOST' in os.environ:
             url = os.environ.get('RADIST_CONF_HOST', '') + \
-                  os.environ.get('RADIST_CONF_PATH', '/rambler/radist.conf')
+                  os.environ.get('RADIST_CONF_PATH', '/config/radist.conf')
         else:
-            url = 'http://conf.rambler.ru/rambler/radist.conf'
+            url = 'http://conf/config/radist.conf'
 
         get_r.r = try3(RadistConf, url)
     return get_r.r
@@ -40,7 +40,7 @@ def get_ix():
     It try to do it 3 times."""
     if get_ix.ix is None:
         url = os.environ.get('IXSEARCH_SERVERMAP',
-            'http://conf.rambler.ru/rambler/ixServers.cfg')
+            'http://conf/config/ixServers.cfg')
         get_ix.ix = try3(IXConfig, url)
     return get_ix.ix
 get_ix.ix = None
