@@ -6,7 +6,7 @@ except ImportError:
 
 setup(
     name="radist",
-    version="0.2.3",
+    version="0.2.4",
     scripts=['rrun'],
     packages=['radist'],
     author="Alexander Shigin",
