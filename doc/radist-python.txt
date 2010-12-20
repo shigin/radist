@@ -9,11 +9,6 @@ all_nodes=False.
 В модуле в основном речь идет о нодах (RadistNode). Именно от них и надо
 "плясать". 
 
-
-<a href="development.html">Разработка</a>
-
-<a href="debug.html">Отладка взаимодействия с radist'ом</a>
-
 Так же в модуле есть некоторое количество вещей, не привязанных непосредственно
 к *radist'у*.  Это `r_exec`, `r_popen2`, `r_popen3`, `MuxReader`,
 `AdvMuxReader`, `get_file` и `pmap`.
@@ -23,6 +18,8 @@ all_nodes=False.
 
 **PYRADIST_RUNNER** задает то, чем запускаются процессы на удаленных машинах,
 например:
+
+.. code-block:: sh
 
     PYRADIST_RUNNER=/usr/local/radist/bin/r2sh sconfig.py
 
@@ -86,8 +83,8 @@ merger1.rambler.ru `r2sh -l indexator id`.
 
 Еще параметры. 
 
-  * `extra` --- словарь, который передается как **extra в функцию.
-  * `ignore_exceptions` --- если True, то пропустить аргумент, который вызвал
+  * **extra** --- словарь, который передается как ``**extra`` в функцию.
+  * **ignore_exceptions** --- если True, то пропустить аргумент, который вызвал
     исключение при обработке.
 
 Фабрика файлов
@@ -134,7 +131,7 @@ merger1.rambler.ru `r2sh -l indexator id`.
   * **get_default** - простой get, который в случае отсутствия нужной ноды и
     аргумента возвращает default значение.
   * **get_servers** - возвращает новую ноду, дети которой представляют все серверы
-    
+
 И некоторые другие:
 
   * **cluster** - возвращает ноды кластера;
@@ -168,10 +165,10 @@ merger1.rambler.ru `r2sh -l indexator id`.
 Ограничения на обычные функции:
 
   * должно быть возможно получить исходный код функции (то есть не получиться 
-  передавать функции, набранные прямо в интерпретаторе, не получиться выполнить 
-  функцию, которая находится только в .pyc/.pyo файле).
+    передавать функции, набранные прямо в интерпретаторе, не получиться выполнить 
+    функцию, которая находится только в .pyc/.pyo файле).
   * функция не должна пользоваться модулями, которые не существуют на удаленной 
-  машине.
+    машине.
 
 Функция может быть генератором или "чистым" итератором (т.е. iter(result) == result).
 В этом случае нет необходимости ждать пока весь генератор выполнится. Я не проверял, 
@@ -179,6 +176,8 @@ merger1.rambler.ru `r2sh -l indexator id`.
 
 Метод r_pexec просто и без затей возвращает результат выполнения на удаленной машине.
 **Например**, посмотреть список всех пользователей на машине:
+
+.. code-block:: python
 
     import pwd
 
@@ -192,7 +191,8 @@ merger1.rambler.ru `r2sh -l indexator id`.
 Обратите внимание, что r_pexec, в отличие от всех остальных r_*, 
 не может быть использована с параметром user. 
 
-### r_executor
+r_executor
+``````````
 
 Метод r_executor возвращает функцию, которая будет выполнена на удаленной машине.
 r_executor принимает параметр user.
@@ -204,20 +204,27 @@ r_executor принимает параметр user.
 
 Пример использования:
 
+.. code-block:: python
+
     func = self.node.r_executor(os.getuid, user='-root')
     assert func() == 0
 
 Специальные ноды
 ----------------
 
-### Парсинг конфигов
+Парсинг конфигов
+````````````````
 
 **RadistConf** - используется для чтения конфига `radist.conf`.
+
+.. code-block:: python
 
     import radist
     r = radist.RadistConf('http://conf/config/radist.conf')
 
 **IXConfig** - используется для чтения конфига `ixServers.cfg`.
+
+.. code-block:: python
 
     import radist
     ix = radist.IXConfig('http://conf/config/ixServers.cfg')
@@ -227,12 +234,15 @@ r_executor принимает параметр user.
 **Внимание** `get_r` и `get_ix` читают файлы один раз. Если они были изменены,
 придется залезть глубоко во внутрь библиотеки.
 
-### FakeNode
+FakeNode
+````````
 
 "Фальшивая нода" - это нода, у которой может быть много детей с одним 
 именем. 
 
 Например: 
+
+.. code-block:: python
 
     import radist
     r = radist.get_r()
@@ -255,11 +265,15 @@ FakeNode создает детей последовательно присваи
 **Например**, нам надо выполнить команду на цветах, заданных sys.argv[1:]
 и на /R/index/common:
 
+.. code-block:: python
+
     node = r.get_node('common', *sys.argv[1:])
     node.cluster_exec('echo %(name)s')
 
 
 Эта программа при sys.argv = ['test.py', '000', '001'] должна вывести на экран:
+
+::
 
     common
     000
@@ -274,6 +288,8 @@ __Использование:__ get_node и get_servers выдает на вых
 
 Предположим, у нас есть файл
 
+::
+
     www1.rambler.ru   -www000
     www2.rambler.ru   -www001
     www3.rambler.ru   -www000 
@@ -281,6 +297,8 @@ __Использование:__ get_node и get_servers выдает на вых
 
 
 У www000 есть более одного бекэнда. ColoredNode создаст следующую иерархию:
+
+::
 
     ix -> www -> c0001
               -> c0002
@@ -319,6 +337,8 @@ __Использование:__ IXConfig для www, wwwFast[0-9]+, cite, refind
 Предположим мы хотим выбрать все rccf ноды, которые 
 живут на webbase01:
 
+.. code-block:: python
+
     nodes = r.rccf.get(server='webbase01.rambler.ru')
 
 
@@ -326,11 +346,15 @@ __Использование:__ IXConfig для www, wwwFast[0-9]+, cite, refind
 что--то более интеллектуальное, можно передать callable объект.
 **Например:** выбрать все цвета, которые заканчиваются на '0':
 
+.. code-block:: python
+
 nodes = r.rccf.get(name=lambda x: x.endswith('0'))
 
 
 Если указано несколько аргументов выполняется операция И. 
 Например:
+
+::
 
     In [11]: r.rccf.get(server='webbase01.rambler.ru', name=lambda x: x.endswith('0'))
     Out[11]: 
@@ -349,11 +373,15 @@ nodes = r.rccf.get(name=lambda x: x.endswith('0'))
 Это практически то же самое, что и прямой доступ к полю. Например
 два следующих метода доступа эквивалентны:
 
+.. code-block:: python
+
     r.get('index/000')
     r.index.c000
 
 
 Отличие появляется, если мы запрашиваем несколько значений за раз:
+
+::
 
     In [12]: r.rccf.get('000', '030')
     Out[12]: 
@@ -365,22 +393,27 @@ nodes = r.rccf.get(name=lambda x: x.endswith('0'))
 
 Второе отличие - это обращение к атрибутам. Две следующие строки эквивалентны:
 
+.. code-block:: python
+
     r.get('index/000/server')
     r.index.c000.primary.server
 
 
 Имена атрибутов берутся из того же radist.attrs.find_map.
 
-### Магия
+Магия
+`````
 
-Специальный селектор '#': он выбирает кластер. 
+Специальный селектор **#**: он выбирает кластер. 
 
-Теперь get поддерживает shell--like синтаксис. Т.е. *, [0-9], [a-z], ?.
+get поддерживает shell--like синтаксис. Т.е. ``*``, [0-9], [a-z], ?.
 Единственное различие: в стандартном модуле fnmatch не поддерживается 
 [!^0-9] вместо этого надо писать [!0-9]. Кстати, shell это тоже поддерживает
 (кроме csh, его все равно надо уничтожить!!! бва-ха-ха!!!).
 
 Например нам надо выполнить команду на кластере и на ноде `common`:
+
+.. code-block:: python
 
     node = r.index.get_node('#', 'common')
     result = node.cluster_run('echo %(name)s')
@@ -395,6 +428,8 @@ get_default
 специальный вариант get, он применяется только в случае одного аргумента
 и только в случае простого взятия:
 
+::
+
     In [14]: print r.get_default('index/999', None)
     None
 
@@ -404,10 +439,14 @@ get_default
 
 Используется стандартная питоновская подстановка. Например:
 
+.. code-block:: python
+
     r.index.common.r_exec("echo %(name)s") # echo common
 
 
 Для подстановки используется все тот же radist.attrs.find_map:
+
+::
 
             'server'      => 'primary.server',
             'dir'         => 'primary.dir',
@@ -446,6 +485,8 @@ get_default
 
 Типичное использование
 ----------------------
+
+::
 
     In [1]: import radist
 
@@ -490,7 +531,7 @@ put_file
 --------
 
 Кладет файл на удаленную машину. Файл может быть задан как имя файла (параметр
-```file_name```) или как итератор по строкам (параметр ```lines```).
+`file_name`) или как итератор по строкам (параметр `lines`).
 
 Внимание, параметр должен указывать точное **имя файла**, а не название директории.
 
@@ -510,6 +551,8 @@ cluster_put
 Несмотря на то, что до этого речь шла в основном о radist.conf, модуль может
 работать и с ixServers.cfg:
 
+.. code-block:: python
+
     import radist
     ix = radist.get_ix()
     ix.merger.cluster_exec('df -i /var', parallel=True)
@@ -517,6 +560,8 @@ cluster_put
 
 Обратите внимание, что тут очень интенсивно применяются ColoredNode.  Например,
 для www:
+
+.. code-block:: python
 
     print ix.www.color000.cluster_size()
     print ix.www.cluster_size()
@@ -530,7 +575,10 @@ cluster_put
 являются обычной нодой. В случае, если имя роли заканчивается цифрой, эта цифра
 будет являться именем сервера. Путь разделяется по подчеркиваниям.
 
-### Специальные роли
+Специальные роли
+````````````````
+
+::
 
     #|regex class_name
 
@@ -539,17 +587,24 @@ cluster_put
 с ролью, то используется соответствующий класс class_name.
 
 
-### Директории
+Директории
+``````````
+
+::
 
     #/name/n server:dir:temp
 
-(После #/name/n должен идти пробел)
+(После **#/name/n** должен идти пробел)
 
 Если, например, добавлена директива 
+
+::
 
     #/index/001 some_server:some_dir:some_temp
 
 то 
+
+.. code-block:: python
 
     r = radist.get_ix()
     r.index.c001.primary.server # => some_server
@@ -559,14 +614,16 @@ cluster_put
 
 Все директивы должны находится в начале файла ixServers.cfg.
 
-### Роли
+Роли
+````
 
   * Fixed --- роль рассматривается "как есть";
   * WWW --- создает "цветную" ноду.
 
 Остальные роли очень узко специализированы.
 
-### Например
+Например
+````````
 
     #!^cluster2$ Fixed
     #!^cluster3$ Fixed
@@ -599,6 +656,8 @@ cluster_open
 Библиотека не содержит `cluster_popen3`. Он реализуется через `MuxReader`.
 Пример:
 
+.. code-block:: python
+
     stdouts = []
     for server in ix.refindex2.get_servers(all_nodes=True).get():
         stdin, stdout = server.r_popen2('hostname')
@@ -630,6 +689,8 @@ mux_test2.py]
 
 **Например**, нам надо выполнить какую--либо команду на машинах `www1`..`www20`:
 
+.. code-block:: python
+
     clu = ['www%d -test' % x for x in range(1, 21)]
     node = radist.IXConfig(config=clu)
     print node.test.cluster_size()
@@ -637,6 +698,8 @@ mux_test2.py]
 
 
 Выведет что--то типа:
+
+::
 
     20
     www16
