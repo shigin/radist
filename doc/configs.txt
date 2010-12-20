@@ -22,12 +22,16 @@ ixServers.cfg
 
 Пример файла:
 
+::
+
     server1     -build -log
     server2     -frontend -log
     server3     -dev_frontend
     server4     -dev_build -backup -log
 
 Для такого файла, будет создана следующая иерархия:
+
+::
 
     ix -> log       : server1, server2, server4
        -> build     : server1
@@ -43,6 +47,8 @@ ixServers.cfg
 Иногда бывает необходимо переопределить поведение по умолчанию, для этого есть
 специальные роли, например, если у нас появилась новый тип фронтенда и есть
 желание назвать эту роль frontend2, придется поступить следующим образом:
+
+::
 
     #|^frontend2$ Fixed
     ...
@@ -61,6 +67,8 @@ radist.conf
 Два других, поддерживаемых сейчас атрибута --- *backup* и *spacelimit*.
 
 Пример этого конфигурационного файла:
+
+::
 
     /R/avatar
         primary=server8:/data/avatar
