@@ -286,9 +286,10 @@ FakeNode создает детей последовательно присваи
     001
 
 
-__Использование:__ get_node и get_servers выдает на выход FakeNode.
+**Использование:** get_node и get_servers выдает на выход FakeNode.
 
-### ColoredNode
+ColoredNode
+```````````
 
 В основном обязана своим присутствием ixServers.cfg
 
@@ -319,7 +320,7 @@ __Использование:__ get_node и get_servers выдает на вых
 В отличие от FakeNode, в ColoredNode нельзя добавить более одного ребенка 
 с одинаковым не числовым именем.
 
-__Использование:__ IXConfig для www, wwwFast[0-9]+, cite, refindex2_backup
+**Использование:** IXConfig для www, wwwFast[0-9]+, cite, refindex2_backup
 
 Атрибуты
 --------
@@ -354,7 +355,7 @@ __Использование:__ IXConfig для www, wwwFast[0-9]+, cite, refind
 
 .. code-block:: python
 
-nodes = r.rccf.get(name=lambda x: x.endswith('0'))
+    nodes = r.rccf.get(name=lambda x: x.endswith('0'))
 
 
 Если указано несколько аргументов выполняется операция И. 
@@ -630,6 +631,7 @@ cluster_put
 
 Например
 ````````
+::
 
     #!^cluster2$ Fixed
     #!^cluster3$ Fixed
@@ -677,12 +679,11 @@ cluster_open
 В результате в result будет содержаться выводи всех команд `hostname`. Нет
 средства упорядочить результат по какому--бы то не было порядку.
 
-Простой пример использования в [source:trunk/radist/python/mux_test2.py
-mux_test2.py]
+Простой пример использования в mux_test2.py.
 
 А еще есть `AdvMuxReader`. Он возвращает (obj, line). Его конструктор требует
 список туплов вида `[(file1, obj1), (file2, obj2), ... ]`. Соответственно, если
-мы прочитали строчку `'r-line'`из file1, то итератор вернет `(obj1, 'r-line')`.
+мы прочитали строчку `'r-line'` из file1, то итератор вернет `(obj1, 'r-line')`.
 
 Сам по себе
 ===========
